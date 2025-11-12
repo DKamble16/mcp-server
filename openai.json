@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "example-mcp": {
-      "command": "npm",
-      "args": ["run", "mcp-server"],
-      "env": {}
-    }
-  }
-}
