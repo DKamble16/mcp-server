@@ -1,4 +1,4 @@
-import { createServerInstance, postPath, sessions } from './mcpShared.js';
+import { createServerInstance, postPath, sessions } from './mcpShared';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 
 // Vercel runtime config (switch to 'edge' if you need edge deployment)
