@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const buildCorsHeaders = (request: NextRequest) => {
-  const origin = request.headers.get("origin") ?? "*";
-
-  return {
-    "Access-Control-Allow-Origin": origin,
+  const origin = request.headers.get("origin");
+  const allowOrigin = origin ?? "*";
+  const headers: Record<string, string> = {
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Allow-Headers":
       request.headers.get("access-control-request-headers") ?? "Content-Type",
-    "Access-Control-Allow-Credentials": "true",
   };
+
+  if (origin) {
+    headers["Access-Control-Allow-Credentials"] = "true";
+  }
+
+  return headers;
 };
 
 export function middleware(request: NextRequest) {
