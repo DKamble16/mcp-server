@@ -40,12 +40,46 @@ Build production bundle:
 npm run build
 ```
 
-## MCP Server
-Run directly:
+## MCP Server (Single File HTTP/SSE)
+Run the combined HTTP/SSE server:
 ```bash
 npm run mcp-server
 ```
-This launches a stdio-based MCP server. It waits for a MCP client (e.g., ChatGPT) to drive requests.
+Endpoints exposed by `server/mcp-server.ts`:
+* `GET http://localhost:8000/mcp` – establishes SSE stream
+* `POST http://localhost:8000/mcp/messages?sessionId=...` – sends protocol frames
+
+Set `PORT` env to change port:
+```bash
+PORT=8010 npm run mcp-server
+```
+
+## Vercel Deployment (API Routes)
+For cloud integration with ChatGPT connectors, use the provided API routes:
+* `GET /api/mcp` (SSE stream) – establishes a session, returns `text/event-stream`.
+* `POST /api/mcp/messages?sessionId=...` – send protocol frames for that session.
+
+Files:
+```
+api/mcp.ts
+api/mcp/messages.ts
+api/mcpShared.ts
+```
+
+Deploy steps:
+1. Install Vercel CLI (`npm i -g vercel`) or connect repo in dashboard.
+2. Run `vercel` then `vercel --prod`.
+3. Test SSE:
+	```bash
+	curl -N -H 'Accept: text/event-stream' https://<your-app>.vercel.app/api/mcp
+	```
+4. Use `https://<your-app>.vercel.app/api/mcp` as MCP Server URL in ChatGPT connector.
+
+Notes:
+* You will not see normal JSON in a browser; SSE keeps an open stream.
+* The client (ChatGPT) extracts `sessionId` from initial events before POST calls.
+* CORS is currently `*`. Tighten for production by restricting allowed origins.
+* For long-lived sessions consider an Edge runtime (`export const config = { runtime: 'edge' };`).
 
 ### Resources
 | URI | Description | Mime |
@@ -78,7 +112,7 @@ After saving, ChatGPT should list the tools and resources under the configured s
 ```
 index.html
 src/main.tsx            # React entry
-server/mcp-server.ts    # MCP server definition
+server/mcp-server.ts    # Single HTTP/SSE MCP server
 openai.json             # Example ChatGPT MCP config
 vite.config.ts          # Vite configuration
 tsconfig.json           # TypeScript config

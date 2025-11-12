@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "mcp-server": "tsx server/mcp-server.ts"
+  "mcp-server": "tsx server/mcp-server.ts",
+  "mcp-http": "tsx server/mcp-http-server.ts"
+  ,"mcp-http-simple": "tsx server/mcp-http-simple.ts"
   },
   "dependencies": {
     "react": "^18.2.0",
