@@ -10,6 +10,5 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ],
-  "ignoreCommand": "echo 'Using gitignore + defaults'"
+  ]
 }
