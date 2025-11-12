@@ -9,8 +9,22 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+# (If using Yarn 2+/Berry; keep required subsets only)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # testing
+# testing & coverage
+/coverage
+coverage-final.json
+coverage-summary.json
 /coverage
 
 # next.js
@@ -24,18 +38,67 @@
 .DS_Store
 *.pem
 
-# debug
+# debug & diagnostics
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+debug.log*
+# debug
+npm-debug.log*
+# env files (can opt-in for committing if needed)
+.env*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.vercel/output
 
 # env files (can opt-in for committing if needed)
 .env*
+# typescript / build metadata
+*.tsbuildinfo
+next-env.d.ts
+.swc
 
 # vercel
 .vercel
 
+# logs (already covered above but ensure folder name)
+logs/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# logs
+logs
+# lockfiles (keep one; ignore alternates if switching tooling)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+package-lock.json.*
+yarn.lock.*
+pnpm-lock.yaml.*
+*.log
+*.log.*
+
+# lockfile backups
+package-lock.json.*
+pnpm-lock.yaml.*
+pnpm-lock.yaml
+yarn.lock.*
+package-lock.json
+
+.idea/
+
+# keep example env if added
+!.env.example
+
+# build system caches
+.turbo
+.eslintcache
+
+# editor settings (optional keep curated ones)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
