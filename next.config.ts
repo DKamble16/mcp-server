@@ -14,7 +14,7 @@ const resolveAssetPrefix = () => {
 
 const nextConfig: NextConfig = {
   assetPrefix: resolveAssetPrefix(),
-  trailingSlash: true,
+  trailingSlash: false,
 };
 
 export default nextConfig;
