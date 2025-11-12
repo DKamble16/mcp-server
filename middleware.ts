@@ -18,9 +18,16 @@ const buildCorsHeaders = (request: NextRequest) => {
 };
 
 export function middleware(request: NextRequest) {
+  console.log(
+    `[middleware] ${request.method} ${request.nextUrl.pathname}${
+      request.nextUrl.search
+    }`
+  );
+
   const corsHeaders = buildCorsHeaders(request);
 
   if (request.method === "OPTIONS") {
+    console.log("[middleware] responding to preflight");
     return new NextResponse(null, {
       status: 204,
       headers: corsHeaders,
@@ -32,9 +39,10 @@ export function middleware(request: NextRequest) {
     response.headers.set(key, value);
   });
 
+  console.log("[middleware] headers injected, forwarding request");
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/mcp/:path*"],
 };
