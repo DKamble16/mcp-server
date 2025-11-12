@@ -28,4 +28,14 @@ export function createServerInstance() {
   return mcp;
 }
 
+// Lightweight metadata for JSON preview (not full resource contents)
+export const resourceList = [
+  { id: 'welcome', uri: 'memory://welcome', description: 'Basic welcome text', mimeType: 'text/plain' },
+  { id: 'status', uri: 'memory://status', description: 'Server status info', mimeType: 'application/json' }
+];
+export const toolList = [
+  { name: 'echo', description: 'Echo back a provided message', inputSchema: { message: 'string' } },
+  { name: 'add', description: 'Add two numbers', inputSchema: { a: 'number', b: 'number' } }
+];
+
 export {};

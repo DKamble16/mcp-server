@@ -63,7 +63,7 @@ Files:
 ```
 api/mcp.ts
 api/mcp/messages.ts
-api/mcpShared.ts
+api/mcp-shared.ts
 ```
 
 Deploy steps:
@@ -77,7 +77,26 @@ Deploy steps:
 
 Notes:
 * You will not see normal JSON in a browser; SSE keeps an open stream.
-* The client (ChatGPT) extracts `sessionId` from initial events before POST calls.
+* Default behavior now returns JSON metadata if you visit `/api/mcp` without `Accept: text/event-stream` and without `?stream=1`. Use `/api/mcp?stream=1` or an `Accept: text/event-stream` header for the live SSE stream.
+* Example JSON preview response:
+```json
+{
+	"name": "example-mcp-server",
+	"version": "0.1.0",
+	"resources": [
+		{ "id": "welcome", "uri": "memory://welcome", "description": "Basic welcome text", "mimeType": "text/plain" },
+		{ "id": "status", "uri": "memory://status", "description": "Server status info", "mimeType": "application/json" }
+	],
+	"tools": [
+		{ "name": "echo", "description": "Echo back a provided message", "inputSchema": { "message": "string" } },
+		{ "name": "add", "description": "Add two numbers", "inputSchema": { "a": "number", "b": "number" } }
+	],
+	"messageEndpoint": "/api/mcp/messages",
+	"usage": { "streamExample": "https://<your-app>.vercel.app/api/mcp?stream=1" }
+}
+```
+* The ChatGPT HTTP connector should still point to the SSE endpoint URL (`https://<your-app>.vercel.app/api/mcp`). It will negotiate SSE automatically; manual users can inspect JSON first.
+* The client (ChatGPT) extracts `sessionId` from initial SSE events before POST calls.
 * CORS is currently `*`. Tighten for production by restricting allowed origins.
 * For long-lived sessions consider an Edge runtime (`export const config = { runtime: 'edge' };`).
 
@@ -100,7 +119,7 @@ Copy or merge `openai.json` into your ChatGPT MCP settings. Example entry:
 	"mcpServers": {
 		"example-mcp": {
 			"command": "npm",
-			"args": ["run", "mcp-server"],
+			"args": ["run", "mcp"],
 			"env": {}
 		}
 	}
