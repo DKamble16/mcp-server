@@ -73,7 +73,10 @@ const helloResource = {
   metadata: openAiMetadata,
 };
 
-const jsonResponse = (payload: JsonRpcSuccess | JsonRpcError, init?: ResponseInit) =>
+const jsonResponse = (
+  payload: JsonRpcSuccess | JsonRpcError | { ok: boolean; message: string },
+  init?: ResponseInit
+) =>
   new Response(JSON.stringify(payload), {
     headers: {
       "content-type": "application/json",
@@ -95,7 +98,17 @@ const methodNotAllowed = (id: JsonRpcRequest["id"]) =>
   );
 
 export async function GET() {
-  return methodNotAllowed(null);
+  return jsonResponse(
+    {
+      ok: true,
+      message: "MCP endpoint ready. Send JSON-RPC POST requests to interact with tools/resources.",
+    },
+    { status: 200 }
+  );
+}
+
+export async function HEAD() {
+  return new Response(null, { status: 204 });
 }
 
 export async function POST(request: NextRequest) {
